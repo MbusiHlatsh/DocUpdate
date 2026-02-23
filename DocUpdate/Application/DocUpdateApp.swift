@@ -11,7 +11,7 @@ import SwiftUI
 struct DocUpdateApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MessageListView()
         }
     }
 }
