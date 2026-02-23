@@ -18,7 +18,7 @@ Data flows one way: the bundle files get parsed at launch, `MessageListViewModel
 
 ## Key Decisions
 
-Compliance check runs on-device. The rules are just keyword matching so there's no reason to involve a network call. It works offline, nothing leaves the device, and it's easy to test since `ComplianceEngine` has no side effects. I added a short simulated delay so the loading state actually gets exercised in the UI.
+Compliance check runs on-device. The rules are just keyword matching so there's no reason to involve a network call. It works offline, nothing leaves the device, and it's easy to test since `ComplianceEngine` has no side effects. The check runs on a background thread via `Task.detached` so the main thread stays free.
 
 In-memory filtering. The dataset is around 200 rows so filtering a Swift array is nearly instant. Core Data would only make sense if the data got much larger or if I needed to persist user-generated state.
 
@@ -29,7 +29,7 @@ Explicit passing over environment injection. The `ComplianceEngine` and physicia
 ## What I'd Improve With More Time
 
 - Cache the parsed data so it doesn't re-parse on every launch (matters more when backed by a real API)
-- Move data loading off the main thread with async/await
+- Move initial data loading off the main thread — it's fast enough with bundled CSVs but would matter with a real network API
 - Better accessibility support: Dynamic Type, VoiceOver labels, proper tap target sizes
 - More filter options: by sentiment, compliance tag, or channel
 - Persist the last used filter across sessions

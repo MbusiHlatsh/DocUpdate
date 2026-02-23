@@ -61,7 +61,7 @@ struct DataLoader {
         let formatter = ISO8601DateFormatter()
         formatter.formatOptions = [.withFullDate, .withTime, .withDashSeparatorInDate, .withColonSeparatorInTime]
 
-        return try lines.compactMap { line in
+        return lines.compactMap { line in
             let cols = parseCSVLine(line)
             guard cols.count >= 11,
                   let msgId = Int(cols[0]),

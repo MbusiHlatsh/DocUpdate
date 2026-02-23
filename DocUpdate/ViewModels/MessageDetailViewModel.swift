@@ -27,9 +27,11 @@ final class MessageDetailViewModel {
 
     func runComplianceCheck() {
         isChecking = true
-        // Simulate brief async work (on-device; deterministic)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) { [self] in
-            complianceResults = engine.check(message: message)
+        Task {
+            let results = await Task.detached(priority: .userInitiated) {
+                self.engine.check(message: self.message)
+            }.value
+            complianceResults = results
             hasRunCheck = true
             isChecking = false
         }
